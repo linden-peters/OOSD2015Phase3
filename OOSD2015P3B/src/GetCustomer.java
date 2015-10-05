@@ -55,7 +55,8 @@ public class GetCustomer extends HttpServlet {
 				//Class.forName("oracle.jdbc.driver.OracleDriver");
 				//Connection con1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orant11g","ictoosd","ictoosd");
 				Class.forName("com.mysql.jdbc.Driver");
-				Connection con1 = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
+				//Connection con1 = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
+				Connection con1 = TravelExpertsDB.getConnection();
 				Statement stmt1 = con1.createStatement();
 				ResultSet rs = stmt1.executeQuery("SELECT * FROM customers where customerid = '" + customerId + "'");
 			    

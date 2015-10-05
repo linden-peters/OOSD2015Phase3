@@ -9,14 +9,14 @@ import javax.servlet.http.*;
 /**
  * Servlet implementation class GetCustomerXML
  */
-public class GetCustomerXML extends HttpServlet {
+public class GetAgentXML extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	private String customerId;
+	private String agentId;
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCustomerXML() {
+    public GetAgentXML() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,8 +43,8 @@ public class GetCustomerXML extends HttpServlet {
 		// TODO Auto-generated method stub
 
 	    //if the employee ID was selected, populate the Employee list
-		customerId = request.getParameter("id");
-	    if (customerId != null)
+		agentId = request.getParameter("id");
+	    if (agentId != null)
 	    {
 			response.setContentType("text/xml");
 	    	PrintWriter out;
@@ -54,25 +54,25 @@ public class GetCustomerXML extends HttpServlet {
 				//Class.forName("oracle.jdbc.driver.OracleDriver");
 				//Connection con1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orant11g","ictoosd","ictoosd");
 				Class.forName("com.mysql.jdbc.Driver");
-				//Connection con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts","root","");
+				//Connection con1 = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
 				Connection con1 = TravelExpertsDB.getConnection();
 				Statement stmt1 = con1.createStatement();
-				ResultSet rs = stmt1.executeQuery("SELECT * FROM customers where CustomerId = " + customerId);
+				ResultSet rs = stmt1.executeQuery("SELECT * FROM agents where AgentId = " + agentId);
 			    
 				//print the start of the display table and open the first row
-				out.println("<customers>");
+				out.println("<agents>");
 				
 			    ResultSetMetaData rsmd = rs.getMetaData();
 			    while (rs.next())
 			    {
-			    	out.println("<customer>");
+			    	out.println("<agent>");
 			    	for (int i=1; i<=rsmd.getColumnCount(); i++)
 			        {
 			           out.println("<" + rsmd.getColumnName(i) + ">" + rs.getString(i) + "</" + rsmd.getColumnName(i) + ">");
 			        }
-			    	out.println("</customer>");
+			    	out.println("</agent>");
 			    }
-			    out.println("</customers>");
+			    out.println("</agents>");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

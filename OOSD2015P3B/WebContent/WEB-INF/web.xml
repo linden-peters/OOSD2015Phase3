@@ -21,6 +21,16 @@
   </servlet-mapping>
   <servlet>
     <description></description>
+    <display-name>GetAgentXML</display-name>
+    <servlet-name>GetAgentXML</servlet-name>
+    <servlet-class>GetAgentXML</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAgentXML</servlet-name>
+    <url-pattern>/GetAgentXML</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
     <display-name>GetCustomer</display-name>
     <servlet-name>GetCustomer</servlet-name>
     <servlet-class>GetCustomer</servlet-class>

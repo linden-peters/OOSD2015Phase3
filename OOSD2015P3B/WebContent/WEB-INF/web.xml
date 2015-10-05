@@ -9,4 +9,34 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>GetAgent</display-name>
+    <servlet-name>GetAgent</servlet-name>
+    <servlet-class>GetAgent</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAgent</servlet-name>
+    <url-pattern>/GetAgent</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetCustomer</display-name>
+    <servlet-name>GetCustomer</servlet-name>
+    <servlet-class>GetCustomer</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetCustomer</servlet-name>
+    <url-pattern>/GetCustomer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetCustomerXML</display-name>
+    <servlet-name>GetCustomerXML</servlet-name>
+    <servlet-class>GetCustomerXML</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetCustomerXML</servlet-name>
+    <url-pattern>/GetCustomerXML</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -1,4 +1,8 @@
-
+/*
+ * GetAgent.java - Agent Servlet
+ * Author: Linden Peters
+ * Written: 2015/10/05
+ */
 
 import java.io.*;
 import java.sql.*;
@@ -9,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class GetCustomer
+ * Servlet implementation class GetAgent
  */
 public class GetAgent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -20,14 +24,12 @@ public class GetAgent extends HttpServlet {
      */
     public GetAgent() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doStuff(request, response);
 	}
 
@@ -35,15 +37,11 @@ public class GetAgent extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doStuff(request, response);
 	}
 
-	private void doStuff(HttpServletRequest request,
-			HttpServletResponse response)
+	private void doStuff(HttpServletRequest request, HttpServletResponse response)
 	{
-		// TODO Auto-generated method stub
-
 	    //if the employee ID was selected, populate the Employee list
 		agentId = request.getParameter("id");
 	    if (agentId != null)
@@ -58,7 +56,7 @@ public class GetAgent extends HttpServlet {
 				//Connection con1 = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
 				Connection con1 = TravelExpertsDB.getConnection();
 				Statement stmt1 = con1.createStatement();
-				ResultSet rs = stmt1.executeQuery("SELECT * FROM agents WHERE agentid = '" + agentId + "'");
+				ResultSet rs = stmt1.executeQuery("SELECT * FROM agents WHERE AgentId = '" + agentId + "'");
 			    
 				//print the start of the display table and open the first row
 				out.println("<table>");
@@ -73,13 +71,10 @@ public class GetAgent extends HttpServlet {
 			    }
 			    out.println("</table>");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		 }

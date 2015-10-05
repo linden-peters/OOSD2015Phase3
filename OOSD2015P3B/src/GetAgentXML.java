@@ -1,4 +1,8 @@
-
+/*
+ * GetAgentXML.java - Agent XML Servlet
+ * Author: Linden Peters
+ * Written: 2015/10/05
+ */
 
 import java.io.*;
 import java.sql.*;
@@ -7,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 /**
- * Servlet implementation class GetCustomerXML
+ * Servlet implementation class GetAgentXML
  */
 public class GetAgentXML extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -18,14 +22,12 @@ public class GetAgentXML extends HttpServlet {
      */
     public GetAgentXML() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doStuff(request, response);
 	}
 
@@ -33,15 +35,11 @@ public class GetAgentXML extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doStuff(request, response);
 	}
 
-	private void doStuff(HttpServletRequest request,
-			HttpServletResponse response)
+	private void doStuff(HttpServletRequest request, HttpServletResponse response)
 	{
-		// TODO Auto-generated method stub
-
 	    //if the employee ID was selected, populate the Employee list
 		agentId = request.getParameter("id");
 	    if (agentId != null)
@@ -49,8 +47,8 @@ public class GetAgentXML extends HttpServlet {
 			response.setContentType("text/xml");
 	    	PrintWriter out;
 			try {
-				 out = response.getWriter();
-			     //get the database objects
+				out = response.getWriter();
+			    //get the database objects
 				//Class.forName("oracle.jdbc.driver.OracleDriver");
 				//Connection con1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orant11g","ictoosd","ictoosd");
 				Class.forName("com.mysql.jdbc.Driver");
@@ -74,13 +72,10 @@ public class GetAgentXML extends HttpServlet {
 			    }
 			    out.println("</agents>");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		 }

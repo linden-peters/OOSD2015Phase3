@@ -1,5 +1,5 @@
 /*
- * GetCustomerXML.java - Customer XML Servlet
+ * GetAgency.java - Agency Servlet
  * Author: Linden Peters
  * Written: 2015/10/05
  */
@@ -8,19 +8,21 @@ import java.io.*;
 import java.sql.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class GetCustomerXML
+ * Servlet implementation class GetAgency
  */
-public class GetCustomerXML extends HttpServlet {
+public class GetAgency extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	private String customerId;
+
+	private String agencyId;
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCustomerXML() {
+    public GetAgency() {
         super();
     }
 
@@ -41,36 +43,33 @@ public class GetCustomerXML extends HttpServlet {
 	private void doStuff(HttpServletRequest request, HttpServletResponse response)
 	{
 	    //if the employee ID was selected, populate the Employee list
-		customerId = request.getParameter("id");
-	    if (customerId != null)
+		agencyId = request.getParameter("id");
+	    if (agencyId != null)
 	    {
-			response.setContentType("text/xml");
-	    	PrintWriter out;
+			PrintWriter out;
 			try {
-				 out = response.getWriter();
-			     //get the database objects
+				out = response.getWriter();
+			    //get the database objects
 				//Class.forName("oracle.jdbc.driver.OracleDriver");
 				//Connection con1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orant11g","ictoosd","ictoosd");
 				Class.forName("com.mysql.jdbc.Driver");
-				//Connection con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelexperts","root","");
+				//Connection con1 = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
 				Connection con1 = TravelExpertsDB.getConnection();
 				Statement stmt1 = con1.createStatement();
-				ResultSet rs = stmt1.executeQuery("SELECT * FROM customers where CustomerId = " + customerId);
+				ResultSet rs = stmt1.executeQuery("SELECT * FROM agencies WHERE AgencyId = '" + agencyId + "'");
 			    
 				//print the start of the display table and open the first row
-				out.println("<customers>");
+				out.println("<table>");
 				
 			    ResultSetMetaData rsmd = rs.getMetaData();
 			    while (rs.next())
 			    {
-			    	out.println("<customer>");
-			    	for (int i=1; i<=rsmd.getColumnCount(); i++)
-			        {
-			           out.println("<" + rsmd.getColumnName(i) + ">" + rs.getString(i) + "</" + rsmd.getColumnName(i) + ">");
-			        }
-			    	out.println("</customer>");
+			       for (int i=1; i<=rsmd.getColumnCount(); i++)
+			       {
+			          out.println("<tr><td>" + rsmd.getColumnName(i) + "</td><td>" + rs.getString(i) + "</td></tr>");
+			       }
 			    }
-			    out.println("</customers>");
+			    out.println("</table>");
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {

@@ -1,4 +1,8 @@
-
+/*
+ * GetCustomer.java - Customer Servlet
+ * Author: Linden Peters
+ * Written: 2015/10/05
+ */
 
 import java.io.*;
 import java.sql.*;
@@ -20,14 +24,12 @@ public class GetCustomer extends HttpServlet {
      */
     public GetCustomer() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doStuff(request, response);
 	}
 
@@ -35,30 +37,26 @@ public class GetCustomer extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doStuff(request, response);
 	}
 
-	private void doStuff(HttpServletRequest request,
-			HttpServletResponse response)
+	private void doStuff(HttpServletRequest request, HttpServletResponse response)
 	{
-		// TODO Auto-generated method stub
-
 	    //if the employee ID was selected, populate the Employee list
 		customerId = request.getParameter("id");
 	    if (customerId != null)
 	    {
 			PrintWriter out;
 			try {
-				 out = response.getWriter();
-			     //get the database objects
+				out = response.getWriter();
+			    //get the database objects
 				//Class.forName("oracle.jdbc.driver.OracleDriver");
 				//Connection con1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orant11g","ictoosd","ictoosd");
 				Class.forName("com.mysql.jdbc.Driver");
 				//Connection con1 = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
 				Connection con1 = TravelExpertsDB.getConnection();
 				Statement stmt1 = con1.createStatement();
-				ResultSet rs = stmt1.executeQuery("SELECT * FROM customers where customerid = '" + customerId + "'");
+				ResultSet rs = stmt1.executeQuery("SELECT * FROM customers where CustomerId = '" + customerId + "'");
 			    
 				//print the start of the display table and open the first row
 				out.println("<table>");
@@ -73,13 +71,10 @@ public class GetCustomer extends HttpServlet {
 			    }
 			    out.println("</table>");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		 }

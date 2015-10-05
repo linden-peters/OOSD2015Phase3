@@ -11,6 +11,26 @@
   </welcome-file-list>
   <servlet>
     <description></description>
+    <display-name>GetAgency</display-name>
+    <servlet-name>GetAgency</servlet-name>
+    <servlet-class>GetAgency</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAgency</servlet-name>
+    <url-pattern>/GetAgency</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetAgencyXML</display-name>
+    <servlet-name>GetAgencyXML</servlet-name>
+    <servlet-class>GetAgencyXML</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAgencyXML</servlet-name>
+    <url-pattern>/GetAgencyXML</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
     <display-name>GetAgent</display-name>
     <servlet-name>GetAgent</servlet-name>
     <servlet-class>GetAgent</servlet-class>

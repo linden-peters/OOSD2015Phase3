@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.*;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 
@@ -126,21 +128,27 @@ public class Agentpart1 {
 						Class.forName("com.mysql.jdbc.Driver");
 						Connection conn = TravelExpertsDB.getConnection();
 						String agentdata = (String)jList1.getSelectedValue();
-						//System.out.println("Deleting: " + agentdata);
-						String part = agentdata.substring(4,6);
+
+
+						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
+						Matcher matcher = pattern.matcher(agentdata);
+						if (matcher.find()) {
+						    System.out.println(matcher.group(1));
+						}
+						String part1 = matcher.group(1);
 						
 					
 						
 						int agentid = 0; // Regex goes here
 						//System.out.println("ParsedID: " + part);
-						String b = "select * from agents where AgentId= '" + part + "'";
+						String b = "select * from agents where AgentId= '" + part1 + "'";
 						
 					    
 						
 						PreparedStatement pst=conn.prepareStatement(b);
 						
 						Agentpart2 sendAgentId = new Agentpart2();
-						sendAgentId.printAgentId(part);
+						sendAgentId.printAgentId(part1);
 						sendAgentId.setVisible(true);
 						
 						//jList1.getSelectedValue()

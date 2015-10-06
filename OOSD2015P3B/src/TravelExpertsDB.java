@@ -16,7 +16,7 @@ public class TravelExpertsDB
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			dbConn = DriverManager.getConnection("jdbc:mysql://192.168.25.139:3306/travelexperts","root","");
+			dbConn = DriverManager.getConnection("jdbc:mysql://192.168.25.25:3306/travelexperts","root","");
 			//conn.setAutoCommit(false);
 		}
 		catch (ClassNotFoundException e) {

@@ -14,6 +14,9 @@ import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -39,6 +42,8 @@ public class Agentpart2 extends JFrame {
 	
 	public static JList lstCurrentCustomer;
 	public static JList lstUnselectCustomer;
+	public static JList models1;
+	public static JList models2;
 
 	/**
 	 * Launch the application.
@@ -185,7 +190,68 @@ public class Agentpart2 extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				models1 = lstCurrentCustomer;
+				models2 = lstUnselectCustomer;
 				
+				if(models1 != null)
+				{
+					for(int i=0; i < models1.length; i++)
+					{
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn = TravelExpertsDB.getConnection();
+						String agentdata = (String)models1.getSelectedValue();
+
+                        //get the Id number right after Id :
+						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
+						Matcher matcher = pattern.matcher(agentdata);
+						if (matcher.find()) {
+						   System.out.println(matcher.group(1));
+						}
+						String id = matcher.group(1);					
+						Agentpart2 sendAgentId = new Agentpart2();
+						sendAgentId.printAgentId(id);
+						sendAgentId.setVisible(true);
+						
+						List subclausedlist = new List();
+						subclausedlist.add("id=" + id + "OR");
+					}
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection conn = TravelExpertsDB.getConnection();				
+					String query="Update customers set AgentId= '" + targetID + "'  where AgentId = subclausedlist";
+					PreparedStatement pst=conn.prepareStatement(query);
+					pst.execute();
+					
+					pst.close();
+				  }else (models2 != null)
+				  {
+					for(int i=0; i < models1.length; i++)
+					{
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn = TravelExpertsDB.getConnection();
+						String agentdata = (String)models1.getSelectedValue();
+
+                        //get the Id number right after Id :
+						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
+						Matcher matcher = pattern.matcher(agentdata);
+						if (matcher.find()) {
+						   System.out.println(matcher.group(1));
+						}
+						String id = matcher.group(1);					
+						Agentpart2 sendAgentId = new Agentpart2();
+						sendAgentId.printAgentId(id);
+						sendAgentId.setVisible(true);
+						
+						List subclausedlist = new List();
+						subclausedlist.add("id=" + id + "OR");
+					}
+					Class.forName("com.mysql.jdbc.Driver");
+					Connection conn = TravelExpertsDB.getConnection();				
+					String query="Update customers set AgentId is null  where AgentId = subclausedlist";
+					PreparedStatement pst=conn.prepareStatement(query);
+					pst.execute();
+					
+					pst.close();
+				}
 				
 				if (targetID > 0)
 				{
@@ -320,39 +386,7 @@ public class Agentpart2 extends JFrame {
 								model1.removeElement(val);
 							}
 						}
-						/*PreparedStatement stmt = null;
-						ResultSet rs = null;
-						Connection conn = null;
-						try{
-
-							Class.forName("com.mysql.jdbc.Driver");
-							conn = TravelExpertsDB.getConnection();
-							//stmt = conn.prepareStatement("select * from customers where AgentId='" + secondtargetID + "' ");	
-							stmt = conn.prepareStatement("UPDATE customers SET AgentId = null where AgentId='" + secondtargetID + "' ");
-							//UPDATE Customers
-							//SET ContactName='Alfred Schmidt', City='Hamburg'
-							//WHERE CustomerName='Alfreds Futterkiste';
-							
-							
-							
-							stmt.executeQuery();
-							rs= stmt.getResultSet();
-							int i = 0;
-							DefaultListModel info2 = new DefaultListModel();
-							
-							while (rs.next()){
-								 info2.addElement("Id :" + rs.getString("CustomerId") +"   "
-							       + "FirstName :" + rs.getString("CustFirstName") +"   "
-							       + "LastName :" + rs.getString("CustLastName") +"   "
-										 );
-								
-								 i = i + 1;
-							 }
-							lstCurrentCustomer.setModel(info2);
-						}catch(Exception e){
-							e.printStackTrace();
-							System.err.println("Error: " +e.getMessage());
-						}*/
+						
 					}
 				}
 				);

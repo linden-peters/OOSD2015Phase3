@@ -113,6 +113,7 @@ public class Agentpart1 {
 				frame.dispose();
 	           Agentpart2 tc = new Agentpart2();
 	           tc.setVisible(true);
+	           
 			}
 		});
 		btnAdd.setBounds(12, 398, 97, 25);
@@ -139,24 +140,24 @@ public class Agentpart1 {
 						
 					
 						
-						int agentid = 0; // Regex goes here
+						//int agentid = 0; // Regex goes here
 						//System.out.println("ParsedID: " + part);
-						String b = "select * from agents where AgentId= '" + part1 + "'";
+						//String b = "select * from agents where AgentId= '" + part1 + "'";
 						
 					    
 						
-						PreparedStatement pst=conn.prepareStatement(b);
+						//PreparedStatement pst=conn.prepareStatement(b);
 						
 						Agentpart2 sendAgentId = new Agentpart2();
 						sendAgentId.printAgentId(part1);
 						sendAgentId.setVisible(true);
 						
 						//jList1.getSelectedValue()
-	                    pst.execute();
+	                   // pst.execute();
 						
 						//JOptionPane.showMessageDialog(null, "Data Deleted");
 						
-						pst.close();
+						//pst.close();
 						//filllist();
 						
 					}catch(Exception e1){

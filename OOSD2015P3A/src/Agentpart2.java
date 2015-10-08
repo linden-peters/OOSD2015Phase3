@@ -77,7 +77,7 @@ public class Agentpart2 extends JFrame {
 		//System.out.print("the id u selected is : " + secondtargetID);
 		
 		filllist2();
-		filllist3();
+		//filllist3();
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -185,6 +185,8 @@ public class Agentpart2 extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				
 				if (targetID > 0)
 				{
 					System.out.println("TargetID = " + targetID + "\n\tEdit Form");
@@ -386,7 +388,8 @@ public class Agentpart2 extends JFrame {
 		
 		
 		//filllist2();
-		
+		lstCurrentCustomer.setModel(new DefaultListModel());
+		filllist3();
 	}
 	
 	private void filllist2(){

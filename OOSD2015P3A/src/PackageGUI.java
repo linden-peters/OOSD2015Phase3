@@ -5,14 +5,18 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
 import java.awt.Font;
+
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
+
 import java.awt.Color;
 
 import javax.swing.ComboBoxModel;
@@ -24,8 +28,8 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-
 import javax.swing.border.CompoundBorder;
+
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -42,6 +46,10 @@ import java.util.Date;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
+
+import javax.swing.JList;
+import javax.swing.JScrollBar;
+import javax.swing.ScrollPaneConstants;
 
 public class PackageGUI extends JFrame {
 
@@ -61,8 +69,14 @@ public class PackageGUI extends JFrame {
 	private JDateChooser dcEndDate;
 	private int packageId1 = 0;
 	private int editpackageId = 0;
+	private int targetID = 0;
+	
+	private JList LstPackageCurrent;
 	
 	Package pkgObj;
+	private JList LstPackageUnselect;
+	private JButton btnMoveUp;
+	private JButton btnPullDown;
 	//private DateFormat df;
 	
 	/**
@@ -87,6 +101,7 @@ public class PackageGUI extends JFrame {
 	{
 		Integer x = Integer.valueOf(pkgId);
 		//packageId1 = x;
+		//targetID = x;
 		editpackageId = x;
 		System.out.print("The ID you selected is : " + editpackageId);
 		
@@ -118,7 +133,8 @@ public class PackageGUI extends JFrame {
 			System.err.println("Error: " + e.getMessage());
 		}
 		
-		
+		filllist4();
+		filllist5();
 	}
 
 
@@ -129,7 +145,7 @@ public class PackageGUI extends JFrame {
 	@SuppressWarnings("unchecked")
 	public PackageGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 830, 525);
+		setBounds(100, 100, 1012, 530);
 		contentPane = new JPanel();
 		contentPane.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		setContentPane(contentPane);
@@ -249,7 +265,7 @@ public class PackageGUI extends JFrame {
 			}
 		});*/
 		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAdd.setBounds(12, 308, 57, 25);
+		btnAdd.setBounds(46, 308, 57, 25);
 		contentPane.add(btnAdd);
 		
 		btnExit = new JButton("Exit");
@@ -342,5 +358,135 @@ public class PackageGUI extends JFrame {
 		dcEndDate.setDateFormatString("yyyy-MM-dd");
 		dcEndDate.setBounds(160, 147, 193, 22);
 		contentPane.add(dcEndDate);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setEnabled(false);
+		scrollPane.setBounds(443, 41, 527, 163);
+		contentPane.add(scrollPane);
+		
+		LstPackageCurrent = new JList();
+		scrollPane.setViewportView(LstPackageCurrent);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_1.setBounds(443, 255, 527, 175);
+		contentPane.add(scrollPane_1);
+		
+		LstPackageUnselect = new JList();
+		scrollPane_1.setViewportView(LstPackageUnselect);
+		
+		btnMoveUp = new JButton("Move up");
+		btnMoveUp.setBounds(553, 214, 97, 25);
+		contentPane.add(btnMoveUp);
+		
+		btnPullDown = new JButton("Pull down");
+		btnPullDown.setBounds(771, 214, 97, 25);
+		contentPane.add(btnPullDown);
+		
+	}
+	
+	private void filllist4(){
+		//targetID = getPkgId(x);
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+			//Integer x = Integer.valueOf(pkgId);
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = TravelExpertsDB.getConnection();
+			stmt = conn.prepareStatement(
+					/*"SELECT  pps.ProductSupplierId, Products.ProductId, Products.ProdName, " +
+                            "Suppliers.SupplierId, Suppliers.SupName FROM Packages p INNER JOIN Packages_Products_Suppliers pps " +
+                             "ON p.PackageId = pps.PackageId INNER JOIN Products_Suppliers ps " +
+                             "ON pps.ProductSupplierId = ps.ProductSupplierId INNER JOIN Products ON " +
+                             "ps.ProductId = Products.ProductId INNER JOIN Suppliers ON " +
+                             "ps.SupplierId = Suppliers.SupplierId WHERE p.PackageId = " +  packageId1 + "order by Products.ProdName");	*/
+					
+					
+					/*SELECT column_name(s)
+					FROM table1
+					INNER JOIN table2
+					ON table1.column_name=table2.column_name;*/
+					
+					"SELECT p.ProductId, t.ProdTypeName, s.SupName FROM products AS p INNER JOIN producttypes AS t INNER JOIN suppliers AS s INNER JOIN packages_products AS pp ON t.ProductTypeId=p.ProductTypeId AND s.SupplierId=p.SupplierId AND pp.ProductId=p.ProductId WHERE pp.PackageId='" + editpackageId + "' ");
+					
+			System.out.print("the editpackageId selected is : " + editpackageId);
+			stmt.executeQuery();
+			rs= stmt.getResultSet();
+			int i = 0;
+			DefaultListModel info4 = new DefaultListModel();
+			
+			while (rs.next()){
+				 info4.addElement("Product Id :" + rs.getString("ProductId") +"   "
+			       + "Product Name :" + rs.getString("ProdTypeName") +"   "
+			       //+ "MiddleInitial :" + rs.getString("AgtMiddleInitial") +"   "
+			       //+ "Supply Id :" + rs.getString("SupplierId") +"   "
+			       + "Supply Name :" + rs.getString("SupName")
+			       //+ "BusPhone :" + rs.getString("AgtBusPhone") +"   "
+			       //+ "Email :" + rs.getString("AgtEmail") +"   "
+			       //+ "Position :" + rs.getString("AgtPosition") +"   "
+			       //+ "AgencyId :" + rs.getString("AgencyId")
+						 );
+				
+				 i = i + 1;
+			 }
+			LstPackageCurrent.setModel(info4);
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error: " +e.getMessage());
+		}
+	}
+	
+	private void filllist5(){
+		//targetID = getPkgId(x);
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Connection conn = null;
+		try{
+			//Integer x = Integer.valueOf(pkgId);
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = TravelExpertsDB.getConnection();
+			stmt = conn.prepareStatement(
+					/*"SELECT  pps.ProductSupplierId, Products.ProductId, Products.ProdName, " +
+                            "Suppliers.SupplierId, Suppliers.SupName FROM Packages p INNER JOIN Packages_Products_Suppliers pps " +
+                             "ON p.PackageId = pps.PackageId INNER JOIN Products_Suppliers ps " +
+                             "ON pps.ProductSupplierId = ps.ProductSupplierId INNER JOIN Products ON " +
+                             "ps.ProductId = Products.ProductId INNER JOIN Suppliers ON " +
+                             "ps.SupplierId = Suppliers.SupplierId WHERE p.PackageId = " +  packageId1 + "order by Products.ProdName");	*/
+					
+					
+					/*SELECT column_name(s)
+					FROM table1
+					INNER JOIN table2
+					ON table1.column_name=table2.column_name;*/
+					
+					"SELECT p.ProductId, t.ProdTypeName, s.SupName FROM products AS p INNER JOIN producttypes AS t INNER JOIN suppliers AS s ON t.ProductTypeId=p.ProductTypeId AND s.SupplierId=p.SupplierId ORDER BY p.ProductId ");
+					
+			System.out.print("the editpackageId selected is : " + editpackageId);
+			stmt.executeQuery();
+			rs= stmt.getResultSet();
+			int i = 0;
+			DefaultListModel info4 = new DefaultListModel();
+			
+			while (rs.next()){
+				 info4.addElement("Product Id :" + rs.getString("ProductId") +"   "
+			       + "Product Name :" + rs.getString("ProdTypeName") +"   "
+			       //+ "MiddleInitial :" + rs.getString("AgtMiddleInitial") +"   "
+			       //+ "Supply Id :" + rs.getString("SupplierId") +"   "
+			       + "Supply Name :" + rs.getString("SupName")
+			       //+ "BusPhone :" + rs.getString("AgtBusPhone") +"   "
+			       //+ "Email :" + rs.getString("AgtEmail") +"   "
+			       //+ "Position :" + rs.getString("AgtPosition") +"   "
+			       //+ "AgencyId :" + rs.getString("AgencyId")
+						 );
+				
+				 i = i + 1;
+			 }
+			LstPackageUnselect.setModel(info4);
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error: " +e.getMessage());
+		}
 	}
 }

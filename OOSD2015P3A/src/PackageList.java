@@ -5,19 +5,23 @@ import java.awt.Window;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import com.toedter.calendar.JDateChooser;
+
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
@@ -207,5 +211,12 @@ public class PackageList extends JFrame {
 		btnExitPkg = new JButton("Exit");
 		btnExitPkg.setBounds(636, 331, 97, 25);
 		contentPane.add(btnExitPkg);
+		//btnExit = new JButton("Exit");
+		btnExitPkg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//System.exit(0);
+				dispose();
+			}
+		});
 	}
 }

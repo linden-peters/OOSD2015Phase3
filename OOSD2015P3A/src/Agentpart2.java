@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.ListModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -42,8 +43,8 @@ public class Agentpart2 extends JFrame {
 	
 	public static JList lstCurrentCustomer;
 	public static JList lstUnselectCustomer;
-	public static JList models1;
-	public static JList models2;
+	public static ListModel model1;
+	public static ListModel model2;
 
 	/**
 	 * Launch the application.
@@ -190,16 +191,26 @@ public class Agentpart2 extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				models1 = lstCurrentCustomer;
-				models2 = lstUnselectCustomer;
+				model1 = lstCurrentCustomer.getModel();
+				model2 = lstUnselectCustomer.getModel();
 				
-				if(models1 != null)
+				if(model1 != null)
 				{
-					for(int i=0; i < models1.length; i++)
+					StringBuffer subclausedlist = new StringBuffer();
+					for(int i=0; i < model1.getSize(); i++)
 					{
-						Class.forName("com.mysql.jdbc.Driver");
+						if (subclausedlist.length() != 0)
+						{
+							subclausedlist.append(" OR ");
+						}
+						try {
+							Class.forName("com.mysql.jdbc.Driver");
+						} catch (ClassNotFoundException e1) {
+							e1.printStackTrace();
+						}
 						Connection conn = TravelExpertsDB.getConnection();
-						String agentdata = (String)models1.getSelectedValue();
+						String agentdata = (String)model1.getElementAt(i);
+						System.out.println("agentdata =" + agentdata);
 
                         //get the Id number right after Id :
 						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
@@ -208,28 +219,50 @@ public class Agentpart2 extends JFrame {
 						   System.out.println(matcher.group(1));
 						}
 						String id = matcher.group(1);					
-						Agentpart2 sendAgentId = new Agentpart2();
-						sendAgentId.printAgentId(id);
-						sendAgentId.setVisible(true);
-						
-						List subclausedlist = new List();
-						subclausedlist.add("id=" + id + "OR");
+						//Agentpart2 sendAgentId = new Agentpart2();
+						//sendAgentId.printAgentId(id);
+						//sendAgentId.setVisible(true);
+						subclausedlist.append("CustomerId=" + id);
+						System.out.println("subclausedlist =" + subclausedlist);
 					}
-					Class.forName("com.mysql.jdbc.Driver");
-					Connection conn = TravelExpertsDB.getConnection();				
-					String query="Update customers set AgentId= '" + targetID + "'  where AgentId = subclausedlist";
-					PreparedStatement pst=conn.prepareStatement(query);
-					pst.execute();
+					//System.out.println("subclausedlist =" + subclausedlist);
+					//System.out.println("subclausedlist =" + CollectionUtils.join(" OR ", subclausedlist));
+					try {
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn = TravelExpertsDB.getConnection();				
+						String query="Update customers set AgentId=" + targetID + " where "+ subclausedlist;
+						System.out.println("targetID =" + targetID);
+						PreparedStatement pst=conn.prepareStatement(query);
+						pst.execute();
+						
+						pst.close();
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 					
-					pst.close();
-				  }else (models2 != null)
+				  }
+				
+				if(model2 != null)
 				  {
-					for(int i=0; i < models1.length; i++)
+					StringBuffer subclausedlist2 = new StringBuffer();
+					for(int i=0; i < model2.getSize(); i++)
 					{
-						Class.forName("com.mysql.jdbc.Driver");
+						
+						if (subclausedlist2.length() != 0)
+						{
+							subclausedlist2.append(" OR ");
+						}
+						try {
+							Class.forName("com.mysql.jdbc.Driver");
+						} catch (ClassNotFoundException e1) {
+							e1.printStackTrace();
+						}
 						Connection conn = TravelExpertsDB.getConnection();
-						String agentdata = (String)models1.getSelectedValue();
-
+						//String agentdata = (String)((JList) model2).getSelectedValue();
+						String agentdata = (String)model2.getElementAt(i);
+						
                         //get the Id number right after Id :
 						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
 						Matcher matcher = pattern.matcher(agentdata);
@@ -237,20 +270,26 @@ public class Agentpart2 extends JFrame {
 						   System.out.println(matcher.group(1));
 						}
 						String id = matcher.group(1);					
-						Agentpart2 sendAgentId = new Agentpart2();
-						sendAgentId.printAgentId(id);
-						sendAgentId.setVisible(true);
+						//Agentpart2 sendAgentId = new Agentpart2();
+						//sendAgentId.printAgentId(id);
+						//sendAgentId.setVisible(true);
 						
-						List subclausedlist = new List();
-						subclausedlist.add("id=" + id + "OR");
+						subclausedlist2.append("CustomerId=" + id);
 					}
-					Class.forName("com.mysql.jdbc.Driver");
-					Connection conn = TravelExpertsDB.getConnection();				
-					String query="Update customers set AgentId is null  where AgentId = subclausedlist";
-					PreparedStatement pst=conn.prepareStatement(query);
-					pst.execute();
+					try {
+						Class.forName("com.mysql.jdbc.Driver");
+						Connection conn = TravelExpertsDB.getConnection();				
+						String query="Update customers set AgentId = null  where "+ subclausedlist2;
+						PreparedStatement pst=conn.prepareStatement(query);
+						pst.execute();
+						
+						pst.close();
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 					
-					pst.close();
 				}
 				
 				if (targetID > 0)

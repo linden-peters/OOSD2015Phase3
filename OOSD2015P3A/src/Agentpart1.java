@@ -129,11 +129,11 @@ public class Agentpart1 {
 						Connection conn = TravelExpertsDB.getConnection();
 						String agentdata = (String)jList1.getSelectedValue();
 
-
+                        //get the Id number right after Id :
 						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
 						Matcher matcher = pattern.matcher(agentdata);
 						if (matcher.find()) {
-						    System.out.println(matcher.group(1));
+						   System.out.println(matcher.group(1));
 						}
 						String part1 = matcher.group(1);
 						

@@ -74,7 +74,7 @@ public class Agentpart2 extends JFrame {
 		Integer x = Integer.valueOf(part2);
 		targetID = x;
 		secondtargetID = x;
-		System.out.print("the id u selected is : " + secondtargetID);
+		//System.out.print("the id u selected is : " + secondtargetID);
 		
 		filllist2();
 		filllist3();
@@ -284,11 +284,17 @@ public class Agentpart2 extends JFrame {
 		btnMoveUp.addActionListener(
 				new ActionListener(){
 					public void actionPerformed(ActionEvent event){
-						lstCurrentCustomer.setListData(lstUnselectCustomer.getSelectedValues());
-						DefaultListModel model = (DefaultListModel) lstUnselectCustomer.getModel();
-						int selectedIndex =lstUnselectCustomer.getSelectedIndex();
-						if (selectedIndex != -1) {
-						    model.remove(selectedIndex);
+						//lstUnselectCustomer.setListData(lstCurrentCustomer.getSelectedValues());
+						//lstCurrentCustomer.remove(lstCurrentCustomer.getSelectedValues());
+						DefaultListModel model1 = (DefaultListModel) lstUnselectCustomer.getModel();
+						DefaultListModel model2 = (DefaultListModel) lstCurrentCustomer.getModel();
+						Object[] selectedValues = lstUnselectCustomer.getSelectedValues();
+						for(Object val : selectedValues)
+						{
+							if (val != null) {
+								model2.addElement(val);
+								model1.removeElement(val);
+							}
 						}
 					}
 				}
@@ -300,13 +306,51 @@ public class Agentpart2 extends JFrame {
 		btnPullDown.addActionListener(
 				new ActionListener(){
 					public void actionPerformed(ActionEvent event){
-						lstUnselectCustomer.setListData(lstCurrentCustomer.getSelectedValues());
+						//lstUnselectCustomer.setListData(lstCurrentCustomer.getSelectedValues());
 						//lstCurrentCustomer.remove(lstCurrentCustomer.getSelectedValues());
-						DefaultListModel model = (DefaultListModel) lstCurrentCustomer.getModel();
-						int selectedIndex = lstCurrentCustomer.getSelectedIndex();
-						if (selectedIndex != -1) {
-						    model.remove(selectedIndex);
+						DefaultListModel model1 = (DefaultListModel) lstCurrentCustomer.getModel();
+						DefaultListModel model2 = (DefaultListModel) lstUnselectCustomer.getModel();
+						Object[] selectedValues = lstCurrentCustomer.getSelectedValues();
+						for(Object val : selectedValues)
+						{
+							if (val != null) {
+								model2.addElement(val);
+								model1.removeElement(val);
+							}
 						}
+						/*PreparedStatement stmt = null;
+						ResultSet rs = null;
+						Connection conn = null;
+						try{
+
+							Class.forName("com.mysql.jdbc.Driver");
+							conn = TravelExpertsDB.getConnection();
+							//stmt = conn.prepareStatement("select * from customers where AgentId='" + secondtargetID + "' ");	
+							stmt = conn.prepareStatement("UPDATE customers SET AgentId = null where AgentId='" + secondtargetID + "' ");
+							//UPDATE Customers
+							//SET ContactName='Alfred Schmidt', City='Hamburg'
+							//WHERE CustomerName='Alfreds Futterkiste';
+							
+							
+							
+							stmt.executeQuery();
+							rs= stmt.getResultSet();
+							int i = 0;
+							DefaultListModel info2 = new DefaultListModel();
+							
+							while (rs.next()){
+								 info2.addElement("Id :" + rs.getString("CustomerId") +"   "
+							       + "FirstName :" + rs.getString("CustFirstName") +"   "
+							       + "LastName :" + rs.getString("CustLastName") +"   "
+										 );
+								
+								 i = i + 1;
+							 }
+							lstCurrentCustomer.setModel(info2);
+						}catch(Exception e){
+							e.printStackTrace();
+							System.err.println("Error: " +e.getMessage());
+						}*/
 					}
 				}
 				);

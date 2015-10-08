@@ -57,7 +57,7 @@ public class Main {
 		JButton btnNav2 = new JButton("Package Manager");
 		btnNav2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PackageGUI mgmtWindow = new PackageGUI();
+				PackageList mgmtWindow = new PackageList();
 				mgmtWindow.setVisible(true);
 			}
 		});

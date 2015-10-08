@@ -34,26 +34,32 @@ public class GetAgencyJSON extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		PrintWriter out = response.getWriter();
-		String agencyid = request.getParameter("id");
 		try {
+			int agencyid = Integer.parseInt(request.getParameter("id"));
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = TravelExpertsDB.getConnection();
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM agencies WHERE AgencyId=" + agencyid);
-			JSONObject obj = new JSONObject();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM agencies" + (agencyid > 0 ? " WHERE AgencyId=" + agencyid : ""));
+			JSONObject objs = new JSONObject();
 			ResultSetMetaData rsmd = rs.getMetaData();
-			if (rs.next())
+			int i = 0;
+			while (rs.next())
 			{
-				for (int i=1; i<rsmd.getColumnCount(); i++)
+				JSONObject obj = new JSONObject();
+				for (int j=1; j<rsmd.getColumnCount(); j++)
 				{
-					obj.put(rsmd.getColumnName(i), rs.getString(i));
+					obj.put(rsmd.getColumnName(j), rs.getString(j));
 				}
+				objs.put(i, obj);
+				i++;
 			}
 			response.setContentType("application/json");
-			out.print(obj.toJSONString());
+			out.print(objs.toJSONString());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
 	}

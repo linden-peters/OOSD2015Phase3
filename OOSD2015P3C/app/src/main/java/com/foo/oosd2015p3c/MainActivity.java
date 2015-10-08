@@ -27,13 +27,14 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
-    String wsHost = "192.168.1.28"; //"10.163.101.212";
+    //String wsHost = "192.168.1.28"; //"10.163.101.212";
     //String wsHost = prefs.getString("pref_wsHost", "192.168.1.28");
-    int    wsPort = 8080;
+    //int    wsPort = 8080;
     //int    wsPort = Integer.parseInt(prefs.getString("pref_wsPort", "0"));
-    String wsName = "OOSD2015P3B";
+    //String wsName = "OOSD2015P3B";
     //String wsName = prefs.getString("pref_wsName", "OOSD2015P3B");
-    String wsPath = wsPathInit();
+    //String wsPath = wsPathInit();
+    /*
     public String getWsHost() { return wsHost; }
     public void setWsHost(String wsHost) {
         this.wsHost = wsHost;
@@ -54,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private String wsPathInit()
     {
         return "http://" + wsHost + (wsPort > 0 ? ":" + wsPort : "") + "/" + wsName + "/";
+        //return "http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/";
+    }
+    */
+    private String getWsPath()
+    {
+        return "http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/";
     }
     TextView tvAgency;
     TextView tvAgent;
@@ -62,13 +69,14 @@ public class MainActivity extends AppCompatActivity {
     String agentId;
     //StringBuilder builder = new StringBuilder();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.activity_main);
         tvAgency = (TextView)findViewById(R.id.tvAgency);
-        new GetAgency().execute();
+        //new GetAgency().execute();
         tvAgent = (TextView)findViewById(R.id.tvAgent);
         etAgentId = (EditText)findViewById(R.id.etAgentId);
         button = (Button)findViewById(R.id.button);
@@ -76,14 +84,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 agentId = etAgentId.getText().toString();
+                new GetAgency().execute();
                 new GetAgent().execute();
             }
         });
-        // set the default values for the preferences
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-        // get default SharedPreferences object
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     class GetAgency extends AsyncTask<Void,Void,Void>
@@ -92,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                URL url = new URL(wsPath + "GetAgencyJSON?id=0");
+                //URL url = new URL("http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/" + "GetAgencyJSON?id=0");
+                URL url = new URL(getWsPath() + "GetAgencyJSON?id=0");
+                Log.d("GetAgency", "URL=" + url.toString());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Accept", "application/json");
                 conn.connect();
@@ -128,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 //URL url = new URL("http://" + hostname + ":8080/OOSD2015P3B/GetCustomerJSON?id=" + custid);
                 //URL url = new URL("http://" + hostname + ":8080/OOSD2015P3B/rest/getrest/" + custid);
+                //URL url = new URL(makeWsPath() + "GetAgentJSON?id=" + agentId);
+                //URL url = new URL("http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/" + "GetAgentJSON?id=" + agentId);
                 URL url = new URL(getWsPath() + "GetAgentJSON?id=" + agentId);
                 Log.d("GetAgent", "URL=" + url.toString());
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -139,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
                 {
                     builder.append(line);
                 }
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -182,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, AboutActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

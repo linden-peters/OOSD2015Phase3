@@ -20,14 +20,14 @@
     -->
     <EditTextPreference
         android:key="pref_wsHost"
-        android:title="Hostname" />
-        <!-- android:defaultValue="192.168.1.28" /> -->
+        android:title="Hostname"
+        android:defaultValue="192.168.1.28" />
     <EditTextPreference
         android:key="pref_wsPort"
-        android:title="Port" />
-        <!-- android:defaultValue="8080" /> -->
+        android:title="Port"
+        android:defaultValue="8080" />
     <EditTextPreference
         android:key="pref_wsName"
-        android:title="Service Name" />
-        <!-- android:defaultValue="OOSD2015P3B" /> -->
+        android:title="Service Name"
+        android:defaultValue="OOSD2015P3B" />
 </PreferenceScreen>

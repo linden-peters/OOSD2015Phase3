@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
+    <string name="title_activity_about">About</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="about">TravelExperts Client App v0.1\nBrowse and display contact information of TravelExperts Agents.\n© 2015 Team 5. All rights reserved.</string>
 </resources>

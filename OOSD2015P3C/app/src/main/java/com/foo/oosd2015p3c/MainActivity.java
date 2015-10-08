@@ -1,6 +1,9 @@
 package com.foo.oosd2015p3c;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +26,13 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences prefs;
     String wsHost = "192.168.1.28"; //"10.163.101.212";
+    //String wsHost = prefs.getString("pref_wsHost", "192.168.1.28");
     int    wsPort = 8080;
+    //int    wsPort = Integer.parseInt(prefs.getString("pref_wsPort", "0"));
     String wsName = "OOSD2015P3B";
+    //String wsName = prefs.getString("pref_wsName", "OOSD2015P3B");
     String wsPath = wsPathInit();
     public String getWsHost() { return wsHost; }
     public void setWsHost(String wsHost) {
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     String agentId;
     //StringBuilder builder = new StringBuilder();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
                 new GetAgent().execute();
             }
         });
+        // set the default values for the preferences
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        // get default SharedPreferences object
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     class GetAgency extends AsyncTask<Void,Void,Void>
@@ -162,6 +175,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            return true;
+        }
+        else if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutActivity.class));
             return true;
         }
 

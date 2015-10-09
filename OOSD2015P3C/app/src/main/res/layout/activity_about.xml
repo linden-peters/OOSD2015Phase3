@@ -1,8 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".AboutActivity" >
+    tools:context=".AboutActivity"
+    android:padding="8dp">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_logo"
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -10,4 +18,4 @@
         android:padding="10dp"
         android:text="@string/about" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -6,13 +6,16 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,37 +30,6 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
-    //String wsHost = "192.168.1.28"; //"10.163.101.212";
-    //String wsHost = prefs.getString("pref_wsHost", "192.168.1.28");
-    //int    wsPort = 8080;
-    //int    wsPort = Integer.parseInt(prefs.getString("pref_wsPort", "0"));
-    //String wsName = "OOSD2015P3B";
-    //String wsName = prefs.getString("pref_wsName", "OOSD2015P3B");
-    //String wsPath = wsPathInit();
-    /*
-    public String getWsHost() { return wsHost; }
-    public void setWsHost(String wsHost) {
-        this.wsHost = wsHost;
-        setWsPath(wsPathInit());
-    }
-    public int getWsPort() { return wsPort; }
-    public void setWsPort(int wsPort) {
-        this.wsPort = wsPort;
-        setWsPath(wsPathInit());
-    }
-    public String getWsName() { return wsName; }
-    public void setWsName(String wsName) {
-        this.wsName = wsName;
-        setWsPath(wsPathInit());
-    }
-    public String getWsPath() { return wsPath; }
-    public void setWsPath(String wsPath) { this.wsPath = wsPath; }
-    private String wsPathInit()
-    {
-        return "http://" + wsHost + (wsPort > 0 ? ":" + wsPort : "") + "/" + wsName + "/";
-        //return "http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/";
-    }
-    */
     private String getWsPath()
     {
         return "http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/";
@@ -68,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     String agentId;
     //StringBuilder builder = new StringBuilder();
+    ListView lvAgency;
+    ListView lvAgent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         tvAgency = (TextView)findViewById(R.id.tvAgency);
         //new GetAgency().execute();
         tvAgent = (TextView)findViewById(R.id.tvAgent);
-        etAgentId = (EditText)findViewById(R.id.etAgentId);
-        button = (Button)findViewById(R.id.button);
+        //etAgentId = (EditText)findViewById(R.id.etAgentId);
+        //button = (Button)findViewById(R.id.button);
+        /*
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
                 new GetAgent().execute();
             }
         });
+        */
+        lvAgency = (ListView)findViewById(R.id.lvAgency);
+        lvAgent = (ListView)findViewById(R.id.lvAgent);
+        new GetAgency().execute();
+        new GetAgent().execute();
     }
 
     class GetAgency extends AsyncTask<Void,Void,Void>
@@ -96,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                //URL url = new URL("http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/" + "GetAgencyJSON?id=0");
                 URL url = new URL(getWsPath() + "GetAgencyJSON?id=0");
                 Log.d("GetAgency", "URL=" + url.toString());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -117,8 +96,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             try {
-                JSONObject obj = new JSONObject(builder.toString());
-                tvAgency.setText(obj.toString());
+                JSONObject objOuter = new JSONObject(builder.toString());
+                //tvAgency.setText(objOuter.toString());
+                StringBuffer listAgency = new StringBuffer();
+                for (int i = 0; i < objOuter.length(); i++)
+                {
+                    if (i > 0) { listAgency.append("\n- - - - - - - - - - - - - - - -\n"); }
+                    JSONObject objInner = objOuter.getJSONObject(""+i);
+                    //listAgency.append(objInner.toString());
+
+                    listAgency.append("[#" + objInner.getString("AgencyId") + "]\n\t"
+                            + objInner.getString("AgncyAddress") + "\n\t"
+                            + objInner.getString("AgncyCity") + ", "
+                            + objInner.getString("AgncyProv") + "\n\t"
+                            + objInner.getString("AgncyCountry") + " "
+                            + objInner.getString("AgncyPostal") + "\n\t"
+                            + PhoneNumberUtils.formatNumber(objInner.getString("AgncyPhone")));// + "\tF: "
+                            //+ objInner.getString("AgncyFax"));
+                }
+                //Log.d("OOSD",listAgency.toString());
+                tvAgency.setText(listAgency.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -132,11 +129,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                //URL url = new URL("http://" + hostname + ":8080/OOSD2015P3B/GetCustomerJSON?id=" + custid);
-                //URL url = new URL("http://" + hostname + ":8080/OOSD2015P3B/rest/getrest/" + custid);
-                //URL url = new URL(makeWsPath() + "GetAgentJSON?id=" + agentId);
-                //URL url = new URL("http://" + prefs.getString("pref_wsHost","") + ":" + prefs.getString("pref_wsPort","") + "/" + prefs.getString("pref_wsName","") + "/" + "GetAgentJSON?id=" + agentId);
-                URL url = new URL(getWsPath() + "GetAgentJSON?id=" + agentId);
+                URL url = new URL(getWsPath() + "GetAgentJSON?id=0");// + agentId);
                 Log.d("GetAgent", "URL=" + url.toString());
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setRequestProperty("Accept","application/json");
@@ -157,8 +150,30 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             try {
-                JSONObject obj = new JSONObject(builder.toString());
-                tvAgent.setText(obj.toString());
+                //JSONObject obj = new JSONObject(builder.toString());
+                //tvAgent.setText(obj.toString());
+                JSONObject objOuter = new JSONObject(builder.toString());
+                //tvAgent.setText(objOuter.toString());
+                StringBuffer listAgent = new StringBuffer();
+                for (int i = 0; i < objOuter.length(); i++)
+                {
+                    if (i > 0) { listAgent.append("\n- - - - - - - - - - - - - - - -\n"); }
+                    JSONObject objInner = objOuter.getJSONObject(""+i);
+                    //listAgency.append(objInner.toString());
+
+                    listAgent.append("[#" + objInner.getString("AgentId") + "] (Agency #"
+                            + objInner.getString("AgencyId") + ")\n\t"
+                            + objInner.getString("AgtFirstName") + " "
+                            + objInner.getString("AgtMiddleInitial") + " "
+                            + objInner.getString("AgtLastName") + "\n\t"
+                            + objInner.getString("AgtBusPhone") + "\n\t"
+                            + objInner.getString("AgtEmail") + "\n\t"
+                            + objInner.getString("AgtPosition"));// + "\tF: "
+                    //+ objInner.getString("AgncyFax"));
+
+                }
+                //Log.d("OOSD",listAgency.toString());
+                tvAgent.setText(listAgent.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -181,8 +196,14 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+        if (id == R.id.action_refresh) {
+            new GetAgency().execute();
+            new GetAgent().execute();
+            Toast.makeText(this,"Refresh Complete",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        else if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
         else if (id == R.id.action_about) {

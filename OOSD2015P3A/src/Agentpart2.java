@@ -194,7 +194,8 @@ public class Agentpart2 extends JFrame {
 				model1 = lstCurrentCustomer.getModel();
 				model2 = lstUnselectCustomer.getModel();
 				
-				if(model1 != null)
+				//if(model1 != null)
+				if(model1.getSize() > 0)
 				{
 					StringBuffer subclausedlist = new StringBuffer();
 					for(int i=0; i < model1.getSize(); i++)
@@ -244,7 +245,8 @@ public class Agentpart2 extends JFrame {
 					
 				  }
 				
-				if(model2 != null)
+				//if(model2 != null)
+				if(model2.getSize() > 0)
 				  {
 					StringBuffer subclausedlist2 = new StringBuffer();
 					for(int i=0; i < model2.getSize(); i++)

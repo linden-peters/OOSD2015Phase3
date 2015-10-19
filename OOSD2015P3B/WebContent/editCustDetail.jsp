@@ -16,7 +16,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Update Details - Travel Experts</title>
+<script type="text/javascript" src="js/customerValidation.js"></script>
 </head>
 <body>
 	<jsp:include page="/header.jsp"/>    <br/>
@@ -137,7 +138,7 @@
 				
 				                        <div class="form-group">
 				                            <div class="col-md-6 col-md-offset-3 text-center">
-				                               <input type="submit" name="update" value="Update" class="btn btn-primary btn-lg" align="left" />
+				                               <input type="submit" name="save" value="Save" class="btn btn-primary btn-lg" onclick="return validateCustomer();" align="left" />
 				                             &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
 				                               <input type="reset" name="reset" value="Reset" class="btn btn-primary btn-lg" align="right"/>
 				                            </div>

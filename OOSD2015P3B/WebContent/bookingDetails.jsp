@@ -17,7 +17,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Customer Profile</title>
+<title>Travel Information - Travel Experts</title>
 <style>
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
 

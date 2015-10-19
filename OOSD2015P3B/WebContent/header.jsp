@@ -19,8 +19,7 @@
 </head>
 <body>
 
-
-    <div class="brand"><img src="img/logo.png" width="80" height="80"/>Travel Experts</div>
+    <div class="brand"><a href="index.jsp"><img src="img/logo.png" width="80" height="80"/></a>Travel Experts</div>
     <div class="address-bar"> 1155 8th Ave SW | Calgary, AB T2P1N3 | 403.271.9873</div>
 
  <!-- Navigation -->
@@ -39,7 +38,16 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+               <%
+    String logStatus = (String)session.getAttribute("loginStatus");
+    if(logStatus != null)
+    {
+        %>
+        
+                     <ul class="nav navbar-nav">
+                     <li>
+                        <a href="index.jsp">Home</a>
+                    </li>
                     <li>
                         <a href="viewCustDetail.jsp">View Details</a>
                     </li>
@@ -50,29 +58,28 @@
                         <a href="bookingDetails.jsp">Booking</a>
                     </li>
                     <li>
-                        <a href="contact.jsp">Contact</a>
+                        <a href="contact.jsp">Contact Us</a>
                     </li>
-                    <li>
-                    	<a href="login.jsp">Login</a>
-                    </li>
+                   
                     <li> 
                     	<a href="logout.jsp" > Logout </a>
                     </li> 
-                 <%--  <%
-                  String loginStatus = (String)session.getAttribute("loginStatus");
-				  if((loginStatus != null) && (loginStatus.equalsIgnoreCase("true")))
-     			 { 
-     			 %>
-					   <li> <a href="logout.jsp" > Logout </a></li>
-                 <% 
-                 }
-                 else
-                 { 
-                 %>
-                   <li><a href="login.jsp">Login</a></li>
-                 <% 
-                 } %> --%>
-                </ul>
+                    </ul>
+         
+        <%
+    } 
+    else
+    {
+        %>
+       				  <ul class="nav navbar-nav">
+                        <li><a href="index.jsp">Home</a>  </li> 
+                        <li><a href="register.jsp">REGISTER</a>  </li>
+                        <li><a href="login.jsp">Login</a></li>
+                         <li><a href="contact.jsp">Contact Us</a>
+                    </ul>
+        <% } %>
+                 
+                
             </div>
             <!-- /.navbar-collapse -->
         </div>

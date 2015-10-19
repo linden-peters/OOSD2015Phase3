@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Welcome to Travel Experts</title>
+<title>Logout - Travel Experts</title>
 </head>
 <body>
 	<jsp:include page="/header.jsp"/>
@@ -22,7 +22,7 @@
 	<h1> You have successfully logged out.</h1>
 	 <div class="form-group">
 		 <div class="col-md-12 text-center">
-			<button type="submit" onclick="login.jsp" class="btn btn-primary btn-lg">Login Here!</button>
+			<button type="submit" onclick="javascript:location.href='login.jsp'" class="btn btn-primary btn-lg">Login Here!</button>
 		 </div>
 	</div>
 	

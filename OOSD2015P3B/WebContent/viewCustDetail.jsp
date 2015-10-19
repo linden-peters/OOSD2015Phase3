@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>View Details - Travel Experts</title>
 </head>
 <body>
 	<jsp:include page="/header.jsp"/>    <br/>
@@ -116,7 +116,7 @@
 				
 				                        <div class="form-group">
 				                            <div class="col-md-12 text-center">
-				                                <button type="button" onclick="editCustDetail.jsp" class="btn btn-primary btn-lg">Edit</button>
+				                                <button type="button" onclick="javascript:location.href='editCustDetail.jsp'" class="btn btn-primary btn-lg">Edit</button>
 				                            </div>
 				                        </div>
 				                    </fieldset>

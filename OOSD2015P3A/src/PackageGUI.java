@@ -62,7 +62,6 @@ public class PackageGUI extends JFrame {
 	private JComboBox cbPkgId;
 	private ComboBoxModel cbPackageIdModel;
 	private JTextArea taDesc;
-	private JButton btnAdd;
 	private JButton btnExit;
 	private JButton btnSave;
 	private JDateChooser dcStartDate; 
@@ -237,36 +236,6 @@ public class PackageGUI extends JFrame {
 		taDesc.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		taDesc.setBounds(160, 171, 193, 57);
 		contentPane.add(taDesc);
-		
-		btnAdd = new JButton("Add");
-		btnAdd.setEnabled(false);
-		/*btnAdd.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) 
-			{
-				//AddPackage addpackage = new AddPackage();
-				//addpackage.setVisible(true);
-				pkgObj = new Package();
-				pkgObj.setPkgName(tfPkgName.getText());
-				pkgObj.setPkgStartDate(dcStartDate.getDate());
-				pkgObj.setPkgEndDate(dcEndDate.getDate());
-				pkgObj.setPkgDesc(taDesc.getText());
-				pkgObj.setPkgBasePrice(Double.parseDouble(tfBasePrice.getText()));
-				pkgObj.setPkgAgencyCommission(Double.parseDouble(tfAgencyCom.getText()));
-				boolean addPackage = PackageDB.addPackage(pkgObj);
-				if(addPackage)
-				{
-					JOptionPane.showMessageDialog(null, "Package Added Successfully");
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null, "Package not added. Please try again");
-				}
-			}
-		});*/
-		btnAdd.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnAdd.setBounds(46, 308, 57, 25);
-		contentPane.add(btnAdd);
 		
 		btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {

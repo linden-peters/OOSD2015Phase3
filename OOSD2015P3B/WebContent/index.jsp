@@ -24,10 +24,14 @@
                 </div>
                 <div class="col-md-9">
                     <p>This is a great place to introduce your company or project and describe what you do.</p>
-                    <p>Lid est laborum dolo rumes fugats untras. Etharums ser quidem rerum facilis dolores nemis omnis fugats vitaes nemo minima rerums unsers sadips amets.</p>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-               		<p>Lid est laborum dolo rumes fugats untras. Etharums ser quidem rerum facilis dolores nemis omnis fugats vitaes nemo minima rerums unsers sadips amets.</p>
-               		
+                   <p>With this application you will be able to sign up, modify your information, and view the packages you have purchased and a financial summary of that information (all links to do so are found on the top). To get started please either sign up or log in.</p></span>
+                <br />
+                <br />
+               <p> If you have any concerns or questions regarding anything, please let us assist you by emailing us at <a href="mailto:contact@travelexperts.com" target="_blank">contact@travelexperts.com</a> or phoning us at <a href="tel:(403)-593-4939" target="_blank" value="+14035934939">(403)-593-4939</a>.
+               <br/>
+               </p>
+            <p>
+                <span style="font-size: 11.5pt; line-height: 107%;  color: black;">Thank you for choosing Travel Experts – Fun times ahead.&nbsp;</span></p>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -54,7 +58,7 @@
                     <img class="img-responsive" width="450" height="750" src="img/winter.JPG" alt="">
                     <h3>Singapore</h3>
                 </div>
-                <div class="clearfix"></div>
+              <!--   <div class="clearfix"></div> -->
             </div>
         </div>
 

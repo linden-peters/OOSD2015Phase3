@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <script></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Test JSP</title>
+<title>Login - Travel Experts</title>
 </head>
 <body>
 	<jsp:include page="/header.jsp"/>    <br/>
@@ -59,6 +59,7 @@
 				                            <div class="col-md-12 text-center">
 				                                <button type="submit" value="Login" onclick="return validateForm();" class="btn btn-primary btn-lg">Login</button>
 				                            </div>
+				                          <br/><a href="register.jsp" align="center">New User? Register Now!</a>
 				                        </div>
 				                    </fieldset>
 				             	</form>

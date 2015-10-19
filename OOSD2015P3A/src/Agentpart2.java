@@ -50,25 +50,24 @@ public class Agentpart2 extends JFrame {
 	 */
 
 	//get the id from agentpart1 which is the user picked
-	public void printAgentId(String part2){
+	public void printAgentId(String part2) {
 		Integer x = Integer.valueOf(part2);
 		targetID = x;
-		secondtargetID = x;	
+		secondtargetID = x;
 		filllist2();
 		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
 		//connect the server, display everything from agents table with the agentid which is transfort from agentpart1
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
+		try {
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement("select * from agents where AgentId='" + x + "'");		
-			stmt.executeQuery();		
-			rs= stmt.getResultSet();
+			stmt = conn.prepareStatement("SELECT * FROM agents WHERE AgentId='" + x + "'");
+			stmt.executeQuery();
+			rs = stmt.getResultSet();
 			
 			//display all the information about the agent which we selected from agent1
-			while (rs.next()){
+			while (rs.next()) {
 				txtAgentFirstName.setText(rs.getString("AgtFirstName"));
 				txtAgentMiddleInitial.setText(rs.getString("AgtMiddleInitial"));
 				txtAgentLastName.setText(rs.getString("AgtLastName"));
@@ -76,10 +75,10 @@ public class Agentpart2 extends JFrame {
 				txtAgentEmail.setText(rs.getString("AgtEmail"));
 				txtAgentPosition.setText(rs.getString("AgtPosition"));
 				txtAgencyId.setText(rs.getString("AgencyId"));
-			 }
-		}catch(Exception e){
+			}
+		} catch(Exception e) {
 			e.printStackTrace();
-			System.err.println("Error: " +e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 		}	
 	}	
 	Connection connection = null;
@@ -89,8 +88,9 @@ public class Agentpart2 extends JFrame {
 	 */
 	
 	//agentpart2 main application
-	public Agentpart2() {	
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public Agentpart2() {
+		setTitle("Agent Management - Edit");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 620, 540);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -162,7 +162,7 @@ public class Agentpart2 extends JFrame {
 						Connection conn = TravelExpertsDB.getConnection();
 						String agentdata = (String)model1.getElementAt(i);
 						//give the id number after id:
-						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
+						Pattern pattern = Pattern.compile("^ID: ([0-9]+)");
 						Matcher matcher = pattern.matcher(agentdata);
 						if (matcher.find()) {
 						   System.out.println(matcher.group(1));
@@ -188,7 +188,7 @@ public class Agentpart2 extends JFrame {
 				
 				//similar like the model1.
 				if(model2.getSize() > 0)
-				  {
+				{
 					StringBuffer subclausedlist2 = new StringBuffer();
 					for(int i=0; i < model2.getSize(); i++)
 					{				
@@ -204,7 +204,7 @@ public class Agentpart2 extends JFrame {
 						Connection conn = TravelExpertsDB.getConnection();
 						String agentdata = (String)model2.getElementAt(i);
 						
-						Pattern pattern = Pattern.compile("^Id :([0-9]+)");
+						Pattern pattern = Pattern.compile("^ID: ([0-9]+)");
 						Matcher matcher = pattern.matcher(agentdata);
 						if (matcher.find()) {
 						   System.out.println(matcher.group(1));
@@ -213,16 +213,12 @@ public class Agentpart2 extends JFrame {
 						subclausedlist2.append("CustomerId=" + id);
 					}
 					try {
-						Class.forName("com.mysql.jdbc.Driver");
 						Connection conn = TravelExpertsDB.getConnection();		
 						//update the agentid become null which is agentid were selected .
-						String query="Update customers set AgentId = null  where "+ subclausedlist2;
+						String query="UPDATE customers SET AgentId = null WHERE "+ subclausedlist2;
 						PreparedStatement pst=conn.prepareStatement(query);
 						pst.execute();
-						
 						pst.close();
-					} catch (ClassNotFoundException e1) {
-						e1.printStackTrace();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}					
@@ -232,20 +228,18 @@ public class Agentpart2 extends JFrame {
 				if (targetID > 0)
 				{
 					System.out.println("TargetID = " + targetID + "\n\tEdit Form");
-					try {						
-						Class.forName("com.mysql.jdbc.Driver");
-						Connection conn = TravelExpertsDB.getConnection();						
-						String query="Update agents set AgtFirstName='"+txtAgentFirstName.getText()+"' , "
+					try {
+						Connection conn = TravelExpertsDB.getConnection();
+						String query="UPDATE agents SET AgtFirstName='"+txtAgentFirstName.getText()+"' , "
 								+ "AgtMiddleInitial='"+txtAgentMiddleInitial.getText()+"'  ,"
 										+ "AgtLastName='"+txtAgentLastName.getText()+"' ,"
-										+ "AgtBusPhone='"+txtAgentPhone.getText()+"' ," 
+										+ "AgtBusPhone='"+txtAgentPhone.getText()+"' ,"
 										+ "AgtEmail='"+txtAgentEmail.getText()+"' ,"
-										+ "AgtPosition='"+txtAgentPosition.getText()+"' where AgentId='" + targetID + "' ";								
-						PreparedStatement pst=conn.prepareStatement(query);
-						pst.execute();						
+										+ "AgtPosition='"+txtAgentPosition.getText()+"' WHERE AgentId='" + targetID + "' ";
+						PreparedStatement pst = conn.prepareStatement(query);
+						pst.execute();
 						pst.close();
-												
-					}catch (Exception ex){
+					} catch (Exception ex) {
 						ex.printStackTrace();
 					}
 				}
@@ -253,12 +247,10 @@ public class Agentpart2 extends JFrame {
 				else if (targetID == 0)
 				{
 					System.out.println("TargetID = 0\n\tAdd Form");
-					try{
-						Class.forName("com.mysql.jdbc.Driver");
+					try {
 						Connection conn = TravelExpertsDB.getConnection();
 						//insert the values into the sql database
-						PreparedStatement pst=conn.prepareStatement("insert into agents (AgtFirstName, AgtMiddleInitial, AgtLastName, AgtBusPhone, AgtEmail, AgtPosition, AgencyId) values (?, ?, ?, ?, ?, ?, ?)");
-					
+						PreparedStatement pst = conn.prepareStatement("INSERT INTO agents (AgtFirstName, AgtMiddleInitial, AgtLastName, AgtBusPhone, AgtEmail, AgtPosition, AgencyId) VALUES (?, ?, ?, ?, ?, ?, ?)");
 						pst.setString(1, txtAgentFirstName.getText() );
 						pst.setString(2, txtAgentMiddleInitial.getText() );
 						pst.setString(3, txtAgentLastName.getText() );
@@ -266,32 +258,28 @@ public class Agentpart2 extends JFrame {
 						pst.setString(5, txtAgentEmail.getText() );
 						pst.setString(6, txtAgentPosition.getText() );
 						pst.setString(7, txtAgencyId.getText() );
-						
 						pst.execute();
-						
-					}catch(Exception e1){
+					} catch(Exception e1) {
 						e1.printStackTrace();
-						System.err.println("Error: " +e1.getMessage());
+						System.err.println("Error: " + e1.getMessage());
 					}
 				}
 				else
 				{
 					System.out.println("TargetID is negative\n\tSomething has gone horribly wrong.");
-				}			
+				}
+				dispose();
 			}
 		});	
-		
-		//define cancel button
 		btnSave.setBounds(31, 432, 97, 25);
-		contentPane.add(btnSave);		
+		contentPane.add(btnSave);
+		//define cancel button
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				dispose();
 			}
 		});
-		
-		
 		btnCancel.setBounds(167, 432, 97, 25);
 		contentPane.add(btnCancel);
 		
@@ -309,47 +297,40 @@ public class Agentpart2 extends JFrame {
 		JButton btnMoveUp = new JButton("Move up");
 		btnMoveUp.setBounds(300, 239, 97, 25);
 		contentPane.add(btnMoveUp);
-		btnMoveUp.addActionListener(
-				new ActionListener(){
-					public void actionPerformed(ActionEvent event){
-						
-						DefaultListModel model1 = (DefaultListModel) lstUnselectCustomer.getModel();
-						DefaultListModel model2 = (DefaultListModel) lstCurrentCustomer.getModel();
-						Object[] selectedValues = lstUnselectCustomer.getSelectedValues();
-						//if the val is not empty, model2 add the selected value and model1 will remove selected value
-						for(Object val : selectedValues)
-						{
-							if (val != null) {
-								model2.addElement(val);
-								model1.removeElement(val);
-							}
-						}
+		btnMoveUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				DefaultListModel model1 = (DefaultListModel) lstUnselectCustomer.getModel();
+				DefaultListModel model2 = (DefaultListModel) lstCurrentCustomer.getModel();
+				Object[] selectedValues = lstUnselectCustomer.getSelectedValues();
+				//if the val is not empty, model2 add the selected value and model1 will remove selected value
+				for(Object val : selectedValues)
+				{
+					if (val != null) {
+						model2.addElement(val);
+						model1.removeElement(val);
 					}
 				}
-				);
+			}
+		});
 		
-		//define pull down button, samilar like move up button
+		//define pull down button, similar like move up button
 		JButton btnPullDown = new JButton("Pull down");
 		btnPullDown.setBounds(453, 239, 97, 25);
 		contentPane.add(btnPullDown);
-		btnPullDown.addActionListener(
-				new ActionListener(){
-					public void actionPerformed(ActionEvent event){
-						DefaultListModel model1 = (DefaultListModel) lstCurrentCustomer.getModel();
-						DefaultListModel model2 = (DefaultListModel) lstUnselectCustomer.getModel();
-						Object[] selectedValues = lstCurrentCustomer.getSelectedValues();
-						for(Object val : selectedValues)
-						{
-							if (val != null) {
-								model2.addElement(val);
-								model1.removeElement(val);
-							}
-						}
-						
+		btnPullDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				DefaultListModel model1 = (DefaultListModel) lstCurrentCustomer.getModel();
+				DefaultListModel model2 = (DefaultListModel) lstUnselectCustomer.getModel();
+				Object[] selectedValues = lstCurrentCustomer.getSelectedValues();
+				for(Object val : selectedValues)
+				{
+					if (val != null) {
+						model2.addElement(val);
+						model1.removeElement(val);
 					}
 				}
-				);
-		
+			}
+		});
 		
 		JLabel lblAgentMiddleInitial = new JLabel("Agent Middle Initial");
 		lblAgentMiddleInitial.setBounds(12, 106, 116, 16);
@@ -382,32 +363,28 @@ public class Agentpart2 extends JFrame {
 	}
 	
 	//show the customers who belong to the agent which was selected from agentpart1 into the list
-	private void filllist2(){
+	private void filllist2() {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		try{
-
-			Class.forName("com.mysql.jdbc.Driver");
+		try {
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement("select * from customers where AgentId='" + secondtargetID + "' ");	
+			stmt = conn.prepareStatement("SELECT * FROM customers WHERE AgentId='" + secondtargetID + "' ");	
 			stmt.executeQuery();
 			rs= stmt.getResultSet();
 			int i = 0;
 			DefaultListModel info2 = new DefaultListModel();
 			
-			while (rs.next()){
-				 info2.addElement("Id :" + rs.getString("CustomerId") +"   "
-			       + "FirstName :" + rs.getString("CustFirstName") +"   "
-			       + "LastName :" + rs.getString("CustLastName") +"   "
-						 );
-				
-				 i = i + 1;
-			 }
+			while (rs.next()) {
+				info2.addElement("ID: " + rs.getString("CustomerId") +"   "
+						+ "FirstName :" + rs.getString("CustFirstName") +"   "
+						+ "LastName :" + rs.getString("CustLastName"));
+				i = i + 1;
+			}
 			lstCurrentCustomer.setModel(info2);
-		}catch(Exception e){
+		} catch(Exception e) {
 			e.printStackTrace();
-			System.err.println("Error: " +e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 	
@@ -416,26 +393,23 @@ public class Agentpart2 extends JFrame {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
+		try {
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement("Select * from customers where AgentId is null ");	
+			stmt = conn.prepareStatement("SELECT * FROM customers WHERE AgentId IS NULL");	
 			stmt.executeQuery();
 			rs= stmt.getResultSet();
 			int i = 0;
 			DefaultListModel info2 = new DefaultListModel();
-			
-			while (rs.next()){
-				 info2.addElement("Id :" + rs.getString("CustomerId") +"   "
-			       + "FirstName :" + rs.getString("CustFirstName") +"   "
-			       + "LastName :" + rs.getString("CustLastName") +"   "
-						 );				
-				 i = i + 1;
-			 }
+			while (rs.next()) {
+				info2.addElement("ID: " + rs.getString("CustomerId") +"   "
+						+ "FirstName :" + rs.getString("CustFirstName") +"   "
+						+ "LastName :" + rs.getString("CustLastName"));
+				i = i + 1;
+			}
 			lstUnselectCustomer.setModel(info2);
-		}catch(Exception e){
+		} catch(Exception e) {
 			e.printStackTrace();
-			System.err.println("Error: " +e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 }

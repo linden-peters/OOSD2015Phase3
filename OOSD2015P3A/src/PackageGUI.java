@@ -1,3 +1,8 @@
+/*
+ * PackageGUI.java - Package Edit Form
+ * Author: Dwija Dholakia, Linden Peters
+ * Written: 2015/10/06
+ */
 import java.awt.BorderLayout;
 import java.sql.SQLException;
 import java.awt.EventQueue;
@@ -94,8 +99,6 @@ public class PackageGUI extends JFrame {
 		});
 	}
 	
-	
-	
 	public void getPkgId(String pkgId)
 	{
 		Integer x = Integer.valueOf(pkgId);
@@ -107,15 +110,11 @@ public class PackageGUI extends JFrame {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		try{
-
-			Class.forName("com.mysql.jdbc.Driver");
+		try {
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement("select * from packages where packageId='" + x + "'");
-			
+			stmt = conn.prepareStatement("SELECT * FROM packages WHERE PackageId='" + x + "'");		
 			stmt.executeQuery();
 			rs= stmt.getResultSet();
-			
 			while (rs.next())
 			{
 				tfPkgName.setText(rs.getString("pkgName"));
@@ -131,18 +130,16 @@ public class PackageGUI extends JFrame {
 			e.printStackTrace();
 			System.err.println("Error: " + e.getMessage());
 		}
-		
 		filllist4();
 		filllist5();
 	}
-
-
 
 	/**
 	 * Create the frame.
 	 */
 	@SuppressWarnings("unchecked")
 	public PackageGUI() {
+		setTitle("Package Management - Edit");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1012, 530);
 		contentPane = new JPanel();
@@ -193,7 +190,6 @@ public class PackageGUI extends JFrame {
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				
 				DateFormat date = DateFormat.getDateInstance(DateFormat.SHORT);
 				NumberFormat currency = NumberFormat.getCurrencyInstance();
 				currency.setMinimumFractionDigits(2);
@@ -240,7 +236,6 @@ public class PackageGUI extends JFrame {
 		btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//System.exit(0);
 				dispose();
 			}
 		});
@@ -250,70 +245,64 @@ public class PackageGUI extends JFrame {
 		
 		btnSave = new JButton("Save");
 		btnSave.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent arg0) 
-		{
-			if (editpackageId > 0)
+			@Override
+			public void mouseClicked(MouseEvent arg0) 
 			{
-				System.out.println("editpackageId = " + editpackageId + "\n\tEdit Form");
-				PreparedStatement stmt = null;
-				Connection conn = null;
-				try {
-					
-					
-					conn = TravelExpertsDB.getConnection();
-					dcStartDate.setDateFormatString("MMMMM d, yyyy");
-					dcEndDate.setDateFormatString("MMMMM d, yyyy");
-					String sql="Update packages set pkgName='"+ tfPkgName.getText()+"' , "
-							+ "pkgStartDate='" + dcStartDate.getDate() + "'  ,"
-									+ "pkgEndDate='" + dcEndDate.getDate() + "' ,"
-									+ "pkgDesc='" + taDesc.getText()+ "' ," 
-									+ "pkgBasePrice='" + tfBasePrice.getText()+ "' ,"
-									+ "pkgAgencyCommission='" + tfAgencyCom.getText()+"' "
-									+ "where packageId='" + editpackageId + "' ";					
-					System.out.println("SQL: " + sql);
-					stmt = conn.prepareStatement(sql);
-					
-					stmt.executeUpdate();
-					
-					stmt.close();
-
-				}
-				catch(SQLException ex)
-	            {
-	                System.out.println("Error occured while updating package: " + ex.getMessage());
-	            }
-				catch (Exception ex)
+				if (editpackageId > 0)
 				{
-					ex.printStackTrace();
+					System.out.println("editpackageId = " + editpackageId + "\n\tEdit Form");
+					PreparedStatement stmt = null;
+					Connection conn = null;
+					try {
+						conn = TravelExpertsDB.getConnection();
+						dcStartDate.setDateFormatString("MMMMM d, yyyy");
+						dcEndDate.setDateFormatString("MMMMM d, yyyy");
+						String sql="UPDATE packages SET PkgName='"+ tfPkgName.getText()+"' , "
+								+ "PkgStartDate='" + dcStartDate.getDate() + "'  ,"
+								+ "PkgEndDate='" + dcEndDate.getDate() + "' ,"
+								+ "PkgDesc='" + taDesc.getText()+ "' ," 
+								+ "PkgBasePrice='" + tfBasePrice.getText()+ "' ,"
+								+ "PkgAgencyCommission='" + tfAgencyCom.getText()+"' "
+								+ "WHERE PackageId='" + editpackageId + "' ";					
+						System.out.println("SQL: " + sql);
+						stmt = conn.prepareStatement(sql);
+						stmt.executeUpdate();
+						stmt.close();
+					}
+					catch(SQLException ex)
+		            {
+		                System.out.println("Error occured while updating package: " + ex.getMessage());
+		            }
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
 				}
-				 
-			}
-			else if (packageId1 == 0)
-			{
-				System.out.println("packageId1 = " + packageId1 + "\n\tAdd Form");
-				pkgObj = new Package();
-				pkgObj.setPkgName(tfPkgName.getText());
-				pkgObj.setPkgStartDate(dcStartDate.getDate());
-				pkgObj.setPkgEndDate(dcEndDate.getDate());
-				pkgObj.setPkgDesc(taDesc.getText());
-				pkgObj.setPkgBasePrice(Double.parseDouble(tfBasePrice.getText()));
-				pkgObj.setPkgAgencyCommission(Double.parseDouble(tfAgencyCom.getText()));
-				boolean addPackage = PackageDB.addPackage(pkgObj);
-				if(addPackage)
+				else if (packageId1 == 0)
 				{
-					JOptionPane.showMessageDialog(null, "Package Added Successfully");
+					System.out.println("packageId1 = " + packageId1 + "\n\tAdd Form");
+					pkgObj = new Package();
+					pkgObj.setPkgName(tfPkgName.getText());
+					pkgObj.setPkgStartDate(dcStartDate.getDate());
+					pkgObj.setPkgEndDate(dcEndDate.getDate());
+					pkgObj.setPkgDesc(taDesc.getText());
+					pkgObj.setPkgBasePrice(Double.parseDouble(tfBasePrice.getText()));
+					pkgObj.setPkgAgencyCommission(Double.parseDouble(tfAgencyCom.getText()));
+					boolean addPackage = PackageDB.addPackage(pkgObj);
+					if(addPackage)
+					{
+						JOptionPane.showMessageDialog(null, "Package Added Successfully");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Package not added. Please try again");
+					}
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(null, "Package not added. Please try again");
+					System.out.println("packageId1 is negative\n\tSomething has gone horribly wrong.");
 				}
 			}
-			else
-			{
-				System.out.println("packageId1 is negative\n\tSomething has gone horribly wrong.");
-			}
-		}
 		});
 		btnSave.setBounds(147, 309, 97, 25);
 		contentPane.add(btnSave);
@@ -352,110 +341,90 @@ public class PackageGUI extends JFrame {
 		btnPullDown = new JButton("Pull down");
 		btnPullDown.setBounds(771, 214, 97, 25);
 		contentPane.add(btnPullDown);
-		
 	}
 	
-	private void filllist4(){
+	private void filllist4() {
 		//targetID = getPkgId(x);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		try{
+		try {
 			//Integer x = Integer.valueOf(pkgId);
-			Class.forName("com.mysql.jdbc.Driver");
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement(
+			stmt = conn.prepareStatement("SELECT p.ProductId, t.ProdTypeName, s.SupName "
+					+ "FROM products AS p "
+					+ "INNER JOIN producttypes AS t "
+					+ "INNER JOIN suppliers AS s "
+					+ "INNER JOIN packages_products AS pp "
+					+ "ON t.ProductTypeId=p.ProductTypeId AND s.SupplierId=p.SupplierId AND pp.ProductId=p.ProductId "
+					+ "WHERE pp.PackageId='" + editpackageId + "' ");
 					/*"SELECT  pps.ProductSupplierId, Products.ProductId, Products.ProdName, " +
                             "Suppliers.SupplierId, Suppliers.SupName FROM Packages p INNER JOIN Packages_Products_Suppliers pps " +
                              "ON p.PackageId = pps.PackageId INNER JOIN Products_Suppliers ps " +
                              "ON pps.ProductSupplierId = ps.ProductSupplierId INNER JOIN Products ON " +
                              "ps.ProductId = Products.ProductId INNER JOIN Suppliers ON " +
                              "ps.SupplierId = Suppliers.SupplierId WHERE p.PackageId = " +  packageId1 + "order by Products.ProdName");	*/
-					
-					
 					/*SELECT column_name(s)
 					FROM table1
 					INNER JOIN table2
 					ON table1.column_name=table2.column_name;*/
-					
-					"SELECT p.ProductId, t.ProdTypeName, s.SupName FROM products AS p INNER JOIN producttypes AS t INNER JOIN suppliers AS s INNER JOIN packages_products AS pp ON t.ProductTypeId=p.ProductTypeId AND s.SupplierId=p.SupplierId AND pp.ProductId=p.ProductId WHERE pp.PackageId='" + editpackageId + "' ");
-					
 			System.out.print("the editpackageId selected is : " + editpackageId);
 			stmt.executeQuery();
 			rs= stmt.getResultSet();
 			int i = 0;
 			DefaultListModel info4 = new DefaultListModel();
-			
-			while (rs.next()){
-				 info4.addElement("Product Id :" + rs.getString("ProductId") +"   "
-			       + "Product Name :" + rs.getString("ProdTypeName") +"   "
-			       //+ "MiddleInitial :" + rs.getString("AgtMiddleInitial") +"   "
-			       //+ "Supply Id :" + rs.getString("SupplierId") +"   "
-			       + "Supply Name :" + rs.getString("SupName")
-			       //+ "BusPhone :" + rs.getString("AgtBusPhone") +"   "
-			       //+ "Email :" + rs.getString("AgtEmail") +"   "
-			       //+ "Position :" + rs.getString("AgtPosition") +"   "
-			       //+ "AgencyId :" + rs.getString("AgencyId")
-						 );
-				
-				 i = i + 1;
-			 }
+			while (rs.next()) {
+				info4.addElement("Product Id :" + rs.getString("ProductId") + "   "
+						+ "Product Name :" + rs.getString("ProdTypeName") + "   "
+						+ "Supply Name :" + rs.getString("SupName"));				
+				i = i + 1;
+			}
 			LstPackageCurrent.setModel(info4);
-		}catch(Exception e){
+		} catch(Exception e) {
 			e.printStackTrace();
-			System.err.println("Error: " +e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 	
-	private void filllist5(){
+	private void filllist5() {
 		//targetID = getPkgId(x);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		try{
+		try {
 			//Integer x = Integer.valueOf(pkgId);
-			Class.forName("com.mysql.jdbc.Driver");
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement(
+			stmt = conn.prepareStatement("SELECT p.ProductId, t.ProdTypeName, s.SupName "
+					+ "FROM products AS p "
+					+ "INNER JOIN producttypes AS t "
+					+ "INNER JOIN suppliers AS s "
+					+ "ON t.ProductTypeId=p.ProductTypeId AND s.SupplierId=p.SupplierId "
+					+ "ORDER BY p.ProductId");
 					/*"SELECT  pps.ProductSupplierId, Products.ProductId, Products.ProdName, " +
                             "Suppliers.SupplierId, Suppliers.SupName FROM Packages p INNER JOIN Packages_Products_Suppliers pps " +
                              "ON p.PackageId = pps.PackageId INNER JOIN Products_Suppliers ps " +
                              "ON pps.ProductSupplierId = ps.ProductSupplierId INNER JOIN Products ON " +
                              "ps.ProductId = Products.ProductId INNER JOIN Suppliers ON " +
                              "ps.SupplierId = Suppliers.SupplierId WHERE p.PackageId = " +  packageId1 + "order by Products.ProdName");	*/
-					
-					
 					/*SELECT column_name(s)
 					FROM table1
 					INNER JOIN table2
 					ON table1.column_name=table2.column_name;*/
-					
-					"SELECT p.ProductId, t.ProdTypeName, s.SupName FROM products AS p INNER JOIN producttypes AS t INNER JOIN suppliers AS s ON t.ProductTypeId=p.ProductTypeId AND s.SupplierId=p.SupplierId ORDER BY p.ProductId ");
-					
 			System.out.print("the editpackageId selected is : " + editpackageId);
 			stmt.executeQuery();
 			rs= stmt.getResultSet();
 			int i = 0;
 			DefaultListModel info4 = new DefaultListModel();
-			
-			while (rs.next()){
-				 info4.addElement("Product Id :" + rs.getString("ProductId") +"   "
-			       + "Product Name :" + rs.getString("ProdTypeName") +"   "
-			       //+ "MiddleInitial :" + rs.getString("AgtMiddleInitial") +"   "
-			       //+ "Supply Id :" + rs.getString("SupplierId") +"   "
-			       + "Supply Name :" + rs.getString("SupName")
-			       //+ "BusPhone :" + rs.getString("AgtBusPhone") +"   "
-			       //+ "Email :" + rs.getString("AgtEmail") +"   "
-			       //+ "Position :" + rs.getString("AgtPosition") +"   "
-			       //+ "AgencyId :" + rs.getString("AgencyId")
-						 );
-				
-				 i = i + 1;
-			 }
+			while (rs.next()) {
+				info4.addElement("Product Id :" + rs.getString("ProductId") + "   "
+						+ "Product Name :" + rs.getString("ProdTypeName") + "   "
+						+ "Supply Name :" + rs.getString("SupName"));
+				i = i + 1;
+			}
 			LstPackageUnselect.setModel(info4);
-		}catch(Exception e){
+		} catch(Exception e) {
 			e.printStackTrace();
-			System.err.println("Error: " +e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 }

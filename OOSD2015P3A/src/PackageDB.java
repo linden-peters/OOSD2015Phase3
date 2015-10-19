@@ -46,7 +46,6 @@ public class PackageDB
 	
 	// populate the combo box with the package IDs
 	public static Vector<String> getPackagesById() {
-		// TODO Auto-generated method stub
 		Vector<String> pkgids = new Vector<String>();
 		try
 		{
@@ -147,7 +146,6 @@ public class PackageDB
 	}
 
 	private static String dateToString(Date pkgDate) {
-		// TODO Auto-generated method stub
 		String dateStr;
        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
        	dateStr = sdf.format(pkgDate);

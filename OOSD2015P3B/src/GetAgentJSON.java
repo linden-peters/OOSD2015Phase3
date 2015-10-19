@@ -46,7 +46,7 @@ public class GetAgentJSON extends HttpServlet {
 			while (rs.next())
 			{
 				JSONObject obj = new JSONObject();
-				for (int j=1; j<rsmd.getColumnCount(); j++)
+				for (int j=1; j<=rsmd.getColumnCount(); j++)
 				{
 					obj.put(rsmd.getColumnName(j), rs.getString(j));
 				}

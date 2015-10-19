@@ -44,7 +44,7 @@ public class GetCustomerJSON extends HttpServlet {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			if (rs.next())
 			{
-				for (int i=1; i<rsmd.getColumnCount(); i++)
+				for (int i=1; i<=rsmd.getColumnCount(); i++)
 				{
 					obj.put(rsmd.getColumnName(i), rs.getString(i));
 				}

@@ -1,3 +1,8 @@
+/*
+ * PackageList.java - Package View Form
+ * Author: Dwija Dholakia, Linden Peters
+ * Written: 2015/10/06
+ */
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Window;
@@ -21,6 +26,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -61,51 +68,41 @@ public class PackageList extends JFrame {
 		initialize();
 		getPackageList();
 	}
-		
+
 	private void getPackageList() 
 	{
-		// TODO Auto-generated method stub
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		Connection conn = null;
-		try
-		{
-
-			//Class.forName("com.mysql.jdbc.Driver");
+		try {
 			conn = TravelExpertsDB.getConnection();
-			stmt = conn.prepareStatement("select * from packages");
+			stmt = conn.prepareStatement("SELECT * FROM packages");
 			stmt.executeQuery();
-			rs= stmt.getResultSet();
+			rs = stmt.getResultSet();
 			int i = 0;
 			DefaultListModel info = new DefaultListModel();
-			
 			while (rs.next())
 			{
-				 info.addElement("ID :" + rs.getInt("packageId") +"   "
-			      + "Package Name: " + rs.getString("pkgName") +"  "
-			       + "Start Date: " + rs.getDate("pkgStartDate") + "  "
-			       + "End Date: " + rs.getDate("pkgEndDate") + "  "
-			       + "Description: " + rs.getString("pkgDesc") + "  "
-			       + "Base Price: " + rs.getString("pkgBasePrice") + "  "
-			       + "Agency Commission: " + rs.getString("pkgAgencyCommission")); 
-				 System.out.println("/n");
-				 i = i + 1;
-				 
+				info.addElement("ID: " + rs.getInt("packageId") + "   "
+						+ "Package Name: " + rs.getString("pkgName") + "  "
+						+ "Start Date: " + rs.getDate("pkgStartDate") + "  "
+						+ "End Date: " + rs.getDate("pkgEndDate") + "  "
+						+ "Description: " + rs.getString("pkgDesc") + "  "
+						+ "Base Price: " + rs.getString("pkgBasePrice") + "  "
+						+ "Agency Commission: " + rs.getString("pkgAgencyCommission")); 
+				System.out.println("/n");
+				i = i + 1;
 			}
-			 list.setModel(info);
-		}
-		catch(Exception e)
-		{
+			list.setModel(info);
+		} catch(Exception e) {
 			e.printStackTrace();
-			System.err.println("Error: " +e.getMessage());
+			System.err.println("Error: " + e.getMessage());
 		}
-		
-
 	}
 
-	
-		public void initialize()
-		{
+	public void initialize()
+	{
+		setTitle("Package Management - View");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 930, 499);
 		contentPane = new JPanel();
@@ -120,17 +117,13 @@ public class PackageList extends JFrame {
 		list = new JList();
 		scrollPane.setViewportView(list);
 		
-		//scrollPane.add(list);
-		
 		btnAddPkg = new JButton("Add");
 		btnAddPkg.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) 
 			{
-				
 				PackageGUI pkgObj = new PackageGUI();
 				pkgObj.setVisible(true);
-				
 			}
 		});
 		btnAddPkg.setBounds(71, 331, 97, 25);
@@ -138,70 +131,54 @@ public class PackageList extends JFrame {
 		
 		btnEditPkg = new JButton("Edit");
 		btnEditPkg.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) 
-		{
-			/*PackageGUI pkgObj = new PackageGUI();
-			pkgObj.setVisible(true);*/
-			PreparedStatement stmt = null;
-			ResultSet rs = null;
-			Connection conn = null;
-			try
+			@Override
+			public void mouseClicked(MouseEvent e) 
 			{
-				conn = TravelExpertsDB.getConnection();
-				String packagedata = (String)list.getSelectedValue();
-				String selectedpkgId = packagedata.substring(4,5);
-				//System.out.println("selectedpkgId : " +  selectedpkgId);
-				int packageid = 0; // Regex goes here
-				String sql = "select * from packages where packageId= '" + selectedpkgId + "'";
-				
-				stmt = conn.prepareStatement(sql);
-				
-				PackageGUI pkgIdObj = new PackageGUI();
-				pkgIdObj.getPkgId(selectedpkgId);
-				pkgIdObj.setVisible(true);
-				
-				stmt.execute();
-				
-				stmt.close();
-				
+				try	{
+					String packageData = (String)list.getSelectedValue();
+					Pattern pattern = Pattern.compile("^ID: ([0-9]+)");
+					Matcher matcher = pattern.matcher(packageData);
+					if (matcher.find()) {
+						System.out.println(matcher.group(1));
+					}
+					String packageId = matcher.group(1);
+					PackageGUI pkgIdObj = new PackageGUI();
+					pkgIdObj.getPkgId(packageId);
+					pkgIdObj.setVisible(true);
+				} catch(Exception e1) {
+					e1.printStackTrace();
+					System.err.println("Error: " + e1.getMessage());
+				}
 			}
-			catch(Exception e1){
-				e1.printStackTrace();
-				System.err.println("Error: " +e1.getMessage());
-			}
-		}
 		});
 		btnEditPkg.setBounds(267, 331, 97, 25);
 		contentPane.add(btnEditPkg);
 		
 		btnDeletePkg = new JButton("Delete");
 		btnDeletePkg.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent arg0) 
-		{
+			@Override
+			public void mouseClicked(MouseEvent arg0) 
+			{
 				PreparedStatement stmt = null;
 				Connection conn = null;
 				try {
 					conn = TravelExpertsDB.getConnection();
-					
 					String packageData = (String)list.getSelectedValue();
-					String pkgId = packageData.substring(4,6);
-
-					String sql = "DELETE from packages where PackageId= '" + pkgId + "'";
+					Pattern pattern = Pattern.compile("^ID: ([0-9]+)");
+					Matcher matcher = pattern.matcher(packageData);
+					if (matcher.find()) {
+						System.out.println(matcher.group(1));
+					}
+					String packageId = matcher.group(1);
+					String sql = "DELETE FROM packages WHERE PackageId= '" + packageId + "'";
 					stmt = conn.prepareStatement(sql);
-			
                     stmt.execute();
-					
 					JOptionPane.showMessageDialog(null, "Package Deleted");
-
 					stmt.close();
 					getPackageList();
-					
-				}
-				catch(Exception e1){
+				} catch(Exception e1) {
 					e1.printStackTrace();
-					System.err.println("Error: " +e1.getMessage());
+					System.err.println("Error: " + e1.getMessage());
 				}
 			}
 		});
@@ -211,10 +188,8 @@ public class PackageList extends JFrame {
 		btnExitPkg = new JButton("Exit");
 		btnExitPkg.setBounds(636, 331, 97, 25);
 		contentPane.add(btnExitPkg);
-		//btnExit = new JButton("Exit");
 		btnExitPkg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//System.exit(0);
 				dispose();
 			}
 		});
